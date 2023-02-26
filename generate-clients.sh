@@ -3,11 +3,10 @@
 BASE_PACKAGE=tech.skagedal.hahabit.generated
 JAVA_CLIENT_DIR=java-client
 TMP_DIR=$(mktemp -d)
-PKG_DIR=src/main/java/tech/skagedal/hahabit/generated
+PKG_DIR=src/main/java/tech/skagedal/hahabit
 SOURCE_DIR=$TMP_DIR/$PKG_DIR/generated
 TARGET_DIR=$JAVA_CLIENT_DIR/app/$PKG_DIR
 
-rm -rf $JAVA_NATIVE_CLIENT_DIR
 openapi-generator generate \
     --input-spec ~/code/hahabit/openapi.yaml \
     --generator-name java \
@@ -18,5 +17,5 @@ openapi-generator generate \
     --model-package ${BASE_PACKAGE}.model \
     --output $TMP_DIR
 
-rm -rf $TARGET_DIR
-cp -r $SOURCE_DIR $TARGET_DIR/..
+rm -rf $TARGET_DIR/generated
+cp -r $SOURCE_DIR $TARGET_DIR/
