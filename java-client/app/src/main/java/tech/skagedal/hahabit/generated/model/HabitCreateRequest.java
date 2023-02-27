@@ -25,61 +25,50 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
-import java.util.List;
-import tech.skagedal.hahabit.generated.model.Habit;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * GetHabits200Response
+ * HabitCreateRequest
  */
 @JsonPropertyOrder({
-  GetHabits200Response.JSON_PROPERTY_HABITS
+  HabitCreateRequest.JSON_PROPERTY_DESCRIPTION
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-02-26T22:29:33.895020+01:00[Europe/Stockholm]")
-public class GetHabits200Response {
-  public static final String JSON_PROPERTY_HABITS = "habits";
-  private List<Habit> habits = new ArrayList<>();
+public class HabitCreateRequest {
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  private String description;
 
-  public GetHabits200Response() { 
+  public HabitCreateRequest() { 
   }
 
-  public GetHabits200Response habits(List<Habit> habits) {
-    this.habits = habits;
-    return this;
-  }
-
-  public GetHabits200Response addHabitsItem(Habit habitsItem) {
-    if (this.habits == null) {
-      this.habits = new ArrayList<>();
-    }
-    this.habits.add(habitsItem);
+  public HabitCreateRequest description(String description) {
+    this.description = description;
     return this;
   }
 
    /**
-   * Get habits
-   * @return habits
+   * Get description
+   * @return description
   **/
   @javax.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_HABITS)
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public List<Habit> getHabits() {
-    return habits;
+  public String getDescription() {
+    return description;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_HABITS)
+  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setHabits(List<Habit> habits) {
-    this.habits = habits;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 
   /**
-   * Return true if this getHabits_200_response object is equal to o.
+   * Return true if this HabitCreateRequest object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -89,20 +78,20 @@ public class GetHabits200Response {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetHabits200Response getHabits200Response = (GetHabits200Response) o;
-    return Objects.equals(this.habits, getHabits200Response.habits);
+    HabitCreateRequest habitCreateRequest = (HabitCreateRequest) o;
+    return Objects.equals(this.description, habitCreateRequest.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(habits);
+    return Objects.hash(description);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetHabits200Response {\n");
-    sb.append("    habits: ").append(toIndentedString(habits)).append("\n");
+    sb.append("class HabitCreateRequest {\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -150,14 +139,9 @@ public class GetHabits200Response {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `habits` to the URL query string
-    if (getHabits() != null) {
-      for (int i = 0; i < getHabits().size(); i++) {
-        if (getHabits().get(i) != null) {
-          joiner.add(getHabits().get(i).toUrlQueryString(String.format("%shabits%s%s", prefix, suffix,
-          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
-        }
-      }
+    // add `description` to the URL query string
+    if (getDescription() != null) {
+      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(String.valueOf(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
     }
 
     return joiner.toString();

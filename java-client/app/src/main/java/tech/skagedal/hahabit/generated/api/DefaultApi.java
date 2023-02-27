@@ -18,7 +18,7 @@ import tech.skagedal.hahabit.generated.invoker.ApiResponse;
 import tech.skagedal.hahabit.generated.invoker.Pair;
 
 import tech.skagedal.hahabit.generated.model.GetHabits200Response;
-import tech.skagedal.hahabit.generated.model.Habit;
+import tech.skagedal.hahabit.generated.model.HabitCreateRequest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-02-26T19:30:57.217852+01:00[Europe/Stockholm]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-02-26T22:29:33.895020+01:00[Europe/Stockholm]")
 public class DefaultApi {
   private final HttpClient memberVarHttpClient;
   private final ObjectMapper memberVarObjectMapper;
@@ -85,22 +85,24 @@ public class DefaultApi {
   /**
    * Create a new habit
    * Create a new habit
-   * @param habit  (required)
+   * @param habitCreateRequest  (required)
+   * @return Object
    * @throws ApiException if fails to make API call
    */
-  public void createHabit(Habit habit) throws ApiException {
-    createHabitWithHttpInfo(habit);
+  public Object createHabit(HabitCreateRequest habitCreateRequest) throws ApiException {
+    ApiResponse<Object> localVarResponse = createHabitWithHttpInfo(habitCreateRequest);
+    return localVarResponse.getData();
   }
 
   /**
    * Create a new habit
    * Create a new habit
-   * @param habit  (required)
-   * @return ApiResponse&lt;Void&gt;
+   * @param habitCreateRequest  (required)
+   * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Void> createHabitWithHttpInfo(Habit habit) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createHabitRequestBuilder(habit);
+  public ApiResponse<Object> createHabitWithHttpInfo(HabitCreateRequest habitCreateRequest) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createHabitRequestBuilder(habitCreateRequest);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -112,17 +114,12 @@ public class DefaultApi {
         if (localVarResponse.statusCode()/ 100 != 2) {
           throw getApiException("createHabit", localVarResponse);
         }
-        return new ApiResponse<Void>(
+        return new ApiResponse<Object>(
           localVarResponse.statusCode(),
           localVarResponse.headers().map(),
-          null
+          localVarResponse.body() == null ? null : memberVarObjectMapper.readValue(localVarResponse.body(), new TypeReference<Object>() {}) // closes the InputStream
         );
       } finally {
-        // Drain the InputStream
-        while (localVarResponse.body().read() != -1) {
-            // Ignore
-        }
-        localVarResponse.body().close();
       }
     } catch (IOException e) {
       throw new ApiException(e);
@@ -133,10 +130,10 @@ public class DefaultApi {
     }
   }
 
-  private HttpRequest.Builder createHabitRequestBuilder(Habit habit) throws ApiException {
-    // verify the required parameter 'habit' is set
-    if (habit == null) {
-      throw new ApiException(400, "Missing the required parameter 'habit' when calling createHabit");
+  private HttpRequest.Builder createHabitRequestBuilder(HabitCreateRequest habitCreateRequest) throws ApiException {
+    // verify the required parameter 'habitCreateRequest' is set
+    if (habitCreateRequest == null) {
+      throw new ApiException(400, "Missing the required parameter 'habitCreateRequest' when calling createHabit");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -149,7 +146,7 @@ public class DefaultApi {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(habit);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(habitCreateRequest);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);

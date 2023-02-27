@@ -26,7 +26,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
@@ -35,24 +34,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @JsonPropertyOrder({
   Habit.JSON_PROPERTY_ID,
+  Habit.JSON_PROPERTY_OWNED_BY,
   Habit.JSON_PROPERTY_DESCRIPTION,
   Habit.JSON_PROPERTY_CREATED_AT
 })
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-02-26T19:30:57.217852+01:00[Europe/Stockholm]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-02-26T22:29:33.895020+01:00[Europe/Stockholm]")
 public class Habit {
   public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
+  private Integer id;
+
+  public static final String JSON_PROPERTY_OWNED_BY = "ownedBy";
+  private String ownedBy;
 
   public static final String JSON_PROPERTY_DESCRIPTION = "description";
   private String description;
 
-  public static final String JSON_PROPERTY_CREATED_AT = "created_at";
+  public static final String JSON_PROPERTY_CREATED_AT = "createdAt";
   private OffsetDateTime createdAt;
 
   public Habit() { 
   }
 
-  public Habit id(UUID id) {
+  public Habit id(Integer id) {
     this.id = id;
     return this;
   }
@@ -65,15 +68,40 @@ public class Habit {
   @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public UUID getId() {
+  public Integer getId() {
     return id;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(Integer id) {
     this.id = id;
+  }
+
+
+  public Habit ownedBy(String ownedBy) {
+    this.ownedBy = ownedBy;
+    return this;
+  }
+
+   /**
+   * Get ownedBy
+   * @return ownedBy
+  **/
+  @javax.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OWNED_BY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getOwnedBy() {
+    return ownedBy;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_OWNED_BY)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOwnedBy(String ownedBy) {
+    this.ownedBy = ownedBy;
   }
 
 
@@ -140,13 +168,14 @@ public class Habit {
     }
     Habit habit = (Habit) o;
     return Objects.equals(this.id, habit.id) &&
+        Objects.equals(this.ownedBy, habit.ownedBy) &&
         Objects.equals(this.description, habit.description) &&
         Objects.equals(this.createdAt, habit.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, createdAt);
+    return Objects.hash(id, ownedBy, description, createdAt);
   }
 
   @Override
@@ -154,6 +183,7 @@ public class Habit {
     StringBuilder sb = new StringBuilder();
     sb.append("class Habit {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    ownedBy: ").append(toIndentedString(ownedBy)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
@@ -208,14 +238,19 @@ public class Habit {
       joiner.add(String.format("%sid%s=%s", prefix, suffix, URLEncoder.encode(String.valueOf(getId()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
     }
 
+    // add `ownedBy` to the URL query string
+    if (getOwnedBy() != null) {
+      joiner.add(String.format("%sownedBy%s=%s", prefix, suffix, URLEncoder.encode(String.valueOf(getOwnedBy()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    }
+
     // add `description` to the URL query string
     if (getDescription() != null) {
       joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(String.valueOf(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
     }
 
-    // add `created_at` to the URL query string
+    // add `createdAt` to the URL query string
     if (getCreatedAt() != null) {
-      joiner.add(String.format("%screated_at%s=%s", prefix, suffix, URLEncoder.encode(String.valueOf(getCreatedAt()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+      joiner.add(String.format("%screatedAt%s=%s", prefix, suffix, URLEncoder.encode(String.valueOf(getCreatedAt()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
     }
 
     return joiner.toString();
