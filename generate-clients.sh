@@ -5,7 +5,7 @@ JAVA_CLIENT_DIR=java-client
 TMP_DIR=$(mktemp -d)
 PKG_DIR=src/main/java/tech/skagedal/hahabit
 SOURCE_DIR=$TMP_DIR/$PKG_DIR/generated
-TARGET_DIR=$JAVA_CLIENT_DIR/app/$PKG_DIR
+TARGET_DIR=$JAVA_CLIENT_DIR/hahabit/$PKG_DIR
 
 openapi-generator generate \
     --input-spec ~/code/hahabit/openapi.yaml \

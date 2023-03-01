@@ -25,50 +25,61 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.List;
+import tech.skagedal.hahabit.generated.model.HabitForDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
- * HabitCreateRequest
+ * GetHabitsForDate200Response
  */
 @JsonPropertyOrder({
-  HabitCreateRequest.JSON_PROPERTY_DESCRIPTION
+  GetHabitsForDate200Response.JSON_PROPERTY_HABITS
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-01T21:30:38.032618+01:00[Europe/Stockholm]")
-public class HabitCreateRequest {
-  public static final String JSON_PROPERTY_DESCRIPTION = "description";
-  private String description;
+public class GetHabitsForDate200Response {
+  public static final String JSON_PROPERTY_HABITS = "habits";
+  private List<HabitForDate> habits = new ArrayList<>();
 
-  public HabitCreateRequest() { 
+  public GetHabitsForDate200Response() { 
   }
 
-  public HabitCreateRequest description(String description) {
-    this.description = description;
+  public GetHabitsForDate200Response habits(List<HabitForDate> habits) {
+    this.habits = habits;
+    return this;
+  }
+
+  public GetHabitsForDate200Response addHabitsItem(HabitForDate habitsItem) {
+    if (this.habits == null) {
+      this.habits = new ArrayList<>();
+    }
+    this.habits.add(habitsItem);
     return this;
   }
 
    /**
-   * Get description
-   * @return description
+   * Get habits
+   * @return habits
   **/
   @javax.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonProperty(JSON_PROPERTY_HABITS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getDescription() {
-    return description;
+  public List<HabitForDate> getHabits() {
+    return habits;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonProperty(JSON_PROPERTY_HABITS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDescription(String description) {
-    this.description = description;
+  public void setHabits(List<HabitForDate> habits) {
+    this.habits = habits;
   }
 
 
   /**
-   * Return true if this HabitCreateRequest object is equal to o.
+   * Return true if this getHabitsForDate_200_response object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -78,20 +89,20 @@ public class HabitCreateRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    HabitCreateRequest habitCreateRequest = (HabitCreateRequest) o;
-    return Objects.equals(this.description, habitCreateRequest.description);
+    GetHabitsForDate200Response getHabitsForDate200Response = (GetHabitsForDate200Response) o;
+    return Objects.equals(this.habits, getHabitsForDate200Response.habits);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description);
+    return Objects.hash(habits);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class HabitCreateRequest {\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("class GetHabitsForDate200Response {\n");
+    sb.append("    habits: ").append(toIndentedString(habits)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -139,9 +150,14 @@ public class HabitCreateRequest {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `description` to the URL query string
-    if (getDescription() != null) {
-      joiner.add(String.format("%sdescription%s=%s", prefix, suffix, URLEncoder.encode(String.valueOf(getDescription()), StandardCharsets.UTF_8).replaceAll("\\+", "%20")));
+    // add `habits` to the URL query string
+    if (getHabits() != null) {
+      for (int i = 0; i < getHabits().size(); i++) {
+        if (getHabits().get(i) != null) {
+          joiner.add(getHabits().get(i).toUrlQueryString(String.format("%shabits%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format("%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
     }
 
     return joiner.toString();
