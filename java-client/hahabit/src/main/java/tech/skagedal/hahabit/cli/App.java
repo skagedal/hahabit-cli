@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Properties;
-import tech.skagedal.hahabit.generated.api.DefaultApi;
+import tech.skagedal.hahabit.generated.api.HahabitApi;
 import tech.skagedal.hahabit.generated.invoker.ApiClient;
 import tech.skagedal.hahabit.generated.invoker.ApiException;
 
@@ -41,11 +42,14 @@ public class App {
         final var encoded = base64Encoder.encodeToString((config.username() + ":" + config.password()).getBytes());
         final var apiClient = new ApiClient()
             .setRequestInterceptor(builder -> builder.header("Authorization", "Basic " + encoded));
-        final var api = new DefaultApi(apiClient);
+        final var api = new HahabitApi(apiClient);
 
         try {
-            final var habits = api.getHabits();
-            habits.getHabits().forEach(habit -> System.out.println(habit.getDescription()));
+            final var habitsForDate = api.getHabitsForDate(LocalDate.now());
+            habitsForDate.getHabits().forEach(habit -> {
+                System.out.print(habit.getTrackingId() != null ? "✅ " : "   ");
+                System.out.println(habit.getDescription());
+            });
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
