@@ -1,17 +1,27 @@
 use std::fs;
+use std::future::Future;
 use termion::raw::IntoRawMode;
 use termion::event::Key;
 use termion::input::TermRead;
 use std::io::{Write, stdout, stdin};
 use openapi::apis::configuration::{BasicAuth, Configuration};
-use openapi::apis::{hahabit_api};
+use openapi::apis::{Error, hahabit_api};
+use openapi::apis::hahabit_api::GetHabitsForDateError;
+use openapi::models::GetHabitsForDate200Response;
 use tokio;
 use toml::Table;
 
 extern crate termion;
 
 fn main() {
-    sync_get_habits();
+    let response: Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> = sync_get_habits();
+    match response {
+        Ok(resp) => {
+            println!("Happy!");
+            println!("{:?}", resp);
+        }
+        Err(_) => {}
+    }
 
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
@@ -64,10 +74,10 @@ fn main() {
 
 
 #[tokio::main]
-async fn sync_get_habits() {
+async fn sync_get_habits() -> Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> {
     let config = configuration();
     let response = hahabit_api::get_habits_for_date(&config, "2020-12-01".to_string()).await;
-    println!("{:?}", response);
+    response
 }
 
 fn configuration() -> Configuration {
