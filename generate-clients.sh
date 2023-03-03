@@ -20,6 +20,7 @@ openapi-generator generate \
 rm -rf $TARGET_DIR/generated
 cp -r $SOURCE_DIR $TARGET_DIR/
 
+rm -rf rust/hahabit/openapi
 openapi-generator generate \
     --input-spec ~/code/hahabit/openapi.yaml \
     --generator-name rust \
