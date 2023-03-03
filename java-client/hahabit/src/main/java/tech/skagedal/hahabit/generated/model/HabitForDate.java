@@ -42,7 +42,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
   HabitForDate.JSON_PROPERTY_DATE,
   HabitForDate.JSON_PROPERTY_TRACKING_ID
 })
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-01T21:30:38.032618+01:00[Europe/Stockholm]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-03T16:56:46.112917+01:00[Europe/Stockholm]")
 public class HabitForDate {
   public static final String JSON_PROPERTY_HABIT_ID = "habitId";
   private Long habitId;

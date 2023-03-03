@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
   GetHabitsForDate200Response.JSON_PROPERTY_HABITS
 })
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-01T21:30:38.032618+01:00[Europe/Stockholm]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-03T16:56:46.112917+01:00[Europe/Stockholm]")
 public class GetHabitsForDate200Response {
   public static final String JSON_PROPERTY_HABITS = "habits";
   private List<HabitForDate> habits = new ArrayList<>();
