@@ -1,13 +1,17 @@
+use std::fs;
 use termion::raw::IntoRawMode;
 use termion::event::Key;
 use termion::input::TermRead;
 use std::io::{Write, stdout, stdin};
-use openapi::apis::hahabit_api::HahabitApi;
+use openapi::apis::configuration::{BasicAuth, Configuration};
+use openapi::apis::{hahabit_api};
+use tokio;
+use toml::Table;
 
 extern crate termion;
 
 fn main() {
-    let api = HahabitApi::new();
+    sync_get_habits();
 
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
@@ -56,4 +60,30 @@ fn main() {
     }
 
     write!(stdout, "{}\r\n", termion::cursor::Down((max - current) as u16)).unwrap();
+}
+
+
+#[tokio::main]
+async fn sync_get_habits() {
+    let config = configuration();
+    let response = hahabit_api::get_habits_for_date(&config, "2020-12-01".to_string()).await;
+    println!("{:?}", response);
+}
+
+fn configuration() -> Configuration {
+    let mut config = Configuration::default();
+    let creds = read_credentials();
+    println!("{:?}", creds);
+    config.basic_auth = creds;
+    config
+}
+
+fn read_credentials() -> Option<BasicAuth> {
+    let home = dirs::home_dir().expect("Unable to find home directory");
+    let creds = home.join(".hahabit.toml");
+    let contents = fs::read_to_string(&creds).expect("Unable to read file");
+    let toml = contents.parse::<Table>().unwrap();
+
+    // lol what is this
+    Some((toml["username"].clone().try_into().unwrap(), Some(toml["password"].clone().try_into().unwrap())))
 }

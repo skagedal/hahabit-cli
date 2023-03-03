@@ -4,5 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+dirs = "4.0.0"
+tokio = { version = "1.26.0", features = ["full"] }
+toml = "0.7.2"
 termion = "2"
 openapi = { path = "./openapi" }
