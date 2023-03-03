@@ -19,3 +19,9 @@ openapi-generator generate \
 
 rm -rf $TARGET_DIR/generated
 cp -r $SOURCE_DIR $TARGET_DIR/
+
+openapi-generator generate \
+    --input-spec ~/code/hahabit/openapi.yaml \
+    --generator-name rust \
+    --library reqwest \
+    --output rust/hahabit/openapi

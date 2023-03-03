@@ -2,10 +2,13 @@ use termion::raw::IntoRawMode;
 use termion::event::Key;
 use termion::input::TermRead;
 use std::io::{Write, stdout, stdin};
+use openapi::apis::hahabit_api::HahabitApi;
 
 extern crate termion;
 
 fn main() {
+    let api = HahabitApi::new();
+
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
 
