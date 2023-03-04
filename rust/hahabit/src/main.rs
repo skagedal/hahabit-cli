@@ -6,7 +6,7 @@ use std::io::{Write, stdout, stdin};
 use chrono::NaiveDate;
 use openapi::apis::configuration::{BasicAuth, Configuration};
 use openapi::apis::{Error, hahabit_api};
-use openapi::apis::hahabit_api::GetHabitsForDateError;
+use openapi::apis::hahabit_api::{GetHabitsForDateError, TrackHabitError};
 use openapi::models::GetHabitsForDate200Response;
 use tokio;
 use toml::Table;
@@ -62,6 +62,9 @@ fn main() {
                 }
             }
             Key::Char('\n') => {
+                write!(stdout, "⏳\r").unwrap();
+                stdout.flush().unwrap();
+                sync_post_habit(habits[current].habit_id.unwrap(), today).unwrap();
                 write!(stdout, "✅\r").unwrap();
             }
             _ => {}
@@ -79,6 +82,14 @@ async fn sync_get_habits(today: NaiveDate) -> Result<GetHabitsForDate200Response
     let config = configuration();
     let response = hahabit_api::get_habits_for_date(&config, today.to_string()).await;
     response
+}
+
+#[tokio::main]
+async fn sync_post_habit(habit_id: i64, today: NaiveDate) -> Result<(), Error<TrackHabitError>> {
+    let config = configuration();
+
+    let response = hahabit_api::track_habit(&config, today.to_string(), habit_id).await;
+    response.map(|_| ())
 }
 
 fn configuration() -> Configuration {
