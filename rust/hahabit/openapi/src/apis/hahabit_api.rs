@@ -51,7 +51,7 @@ pub enum TrackHabitError {
 
 
 /// Create a new habit
-pub async fn create_habit(configuration: &configuration::Configuration, habit_create_request: crate::models::HabitCreateRequest) -> Result<serde_json::Value, Error<CreateHabitError>> {
+pub fn create_habit(configuration: &configuration::Configuration, habit_create_request: crate::models::HabitCreateRequest) -> Result<serde_json::Value, Error<CreateHabitError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -68,10 +68,10 @@ pub async fn create_habit(configuration: &configuration::Configuration, habit_cr
     local_var_req_builder = local_var_req_builder.json(&habit_create_request);
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let mut local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -83,7 +83,7 @@ pub async fn create_habit(configuration: &configuration::Configuration, habit_cr
 }
 
 /// Get all habits
-pub async fn get_habits(configuration: &configuration::Configuration, ) -> Result<crate::models::GetHabits200Response, Error<GetHabitsError>> {
+pub fn get_habits(configuration: &configuration::Configuration, ) -> Result<crate::models::GetHabits200Response, Error<GetHabitsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -99,10 +99,10 @@ pub async fn get_habits(configuration: &configuration::Configuration, ) -> Resul
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let mut local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -114,7 +114,7 @@ pub async fn get_habits(configuration: &configuration::Configuration, ) -> Resul
 }
 
 /// Get all habits for a specific date
-pub async fn get_habits_for_date(configuration: &configuration::Configuration, date: String) -> Result<crate::models::GetHabitsForDate200Response, Error<GetHabitsForDateError>> {
+pub fn get_habits_for_date(configuration: &configuration::Configuration, date: String) -> Result<crate::models::GetHabitsForDate200Response, Error<GetHabitsForDateError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -130,10 +130,10 @@ pub async fn get_habits_for_date(configuration: &configuration::Configuration, d
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let mut local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -145,7 +145,7 @@ pub async fn get_habits_for_date(configuration: &configuration::Configuration, d
 }
 
 /// Track a habit for a specific date
-pub async fn track_habit(configuration: &configuration::Configuration, date: String, habit_id: i64) -> Result<serde_json::Value, Error<TrackHabitError>> {
+pub fn track_habit(configuration: &configuration::Configuration, date: String, habit_id: i64) -> Result<serde_json::Value, Error<TrackHabitError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -161,10 +161,10 @@ pub async fn track_habit(configuration: &configuration::Configuration, date: Str
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let mut local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)

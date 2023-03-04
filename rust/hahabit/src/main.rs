@@ -8,7 +8,6 @@ use openapi::apis::configuration::{BasicAuth, Configuration};
 use openapi::apis::{Error, hahabit_api};
 use openapi::apis::hahabit_api::{GetHabitsForDateError, TrackHabitError};
 use openapi::models::GetHabitsForDate200Response;
-use tokio;
 use toml::Table;
 
 extern crate termion;
@@ -17,8 +16,10 @@ fn main() {
     let today = chrono::Local::now().date_naive();
     println!("{}", today);
 
-    let response: Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> = sync_get_habits(today);
-    let habits = response.expect("Failed to get habits for date").habits;
+    let api_config = configuration();
+    let habits = get_habits(&api_config, today)
+        .expect("Failed to get habits for date")
+        .habits;
 
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
@@ -63,7 +64,7 @@ fn main() {
             Key::Char('\n') => {
                 write!(stdout, "⏳\r").unwrap();
                 stdout.flush().unwrap();
-                sync_post_habit(habits[current].habit_id, today).unwrap();
+                track_habit(&api_config, habits[current].habit_id, today).unwrap();
                 write!(stdout, "✅\r").unwrap();
             }
             _ => {}
@@ -76,19 +77,13 @@ fn main() {
 }
 
 
-#[tokio::main]
-async fn sync_get_habits(today: NaiveDate) -> Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> {
-    let config = configuration();
-    let response = hahabit_api::get_habits_for_date(&config, today.to_string()).await;
-    response
+fn get_habits(config: &Configuration, today: NaiveDate) -> Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> {
+    hahabit_api::get_habits_for_date(&config, today.to_string())
 }
 
-#[tokio::main]
-async fn sync_post_habit(habit_id: i64, today: NaiveDate) -> Result<(), Error<TrackHabitError>> {
-    let config = configuration();
-
-    let response = hahabit_api::track_habit(&config, today.to_string(), habit_id).await;
-    response.map(|_| ())
+fn track_habit(config: &Configuration, habit_id: i64, today: NaiveDate) -> Result<(), Error<TrackHabitError>> {
+    hahabit_api::track_habit(&config, today.to_string(), habit_id)
+        .map(|_| ())
 }
 
 fn configuration() -> Configuration {
