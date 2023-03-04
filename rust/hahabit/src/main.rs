@@ -1,9 +1,9 @@
 use std::fs;
-use std::future::Future;
 use termion::raw::IntoRawMode;
 use termion::event::Key;
 use termion::input::TermRead;
 use std::io::{Write, stdout, stdin};
+use chrono::NaiveDate;
 use openapi::apis::configuration::{BasicAuth, Configuration};
 use openapi::apis::{Error, hahabit_api};
 use openapi::apis::hahabit_api::GetHabitsForDateError;
@@ -14,36 +14,37 @@ use toml::Table;
 extern crate termion;
 
 fn main() {
-    let response: Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> = sync_get_habits();
-    match response {
-        Ok(resp) => {
-            println!("Happy!");
-            println!("{:?}", resp);
-        }
-        Err(_) => {}
-    }
+    let today = chrono::Local::now().date_naive();
+    println!("{}", today);
+
+    let response: Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> = sync_get_habits(today);
+    let response = response.expect("Failed to get habits for date");
+    let habits = response.habits.unwrap();
 
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
 
-    let lines = vec!["One", "Two", "three"];
-
     let mut first = true;
-    for line in &lines {
+    for habit in &habits {
         if !first {
             write!(stdout, "\r\n").unwrap();
         }
-        write!(stdout, "🔳️ {}", line).unwrap();
+        write!(stdout, "{} {}",
+            match habit.tracking_id.unwrap() {
+                Some(_) => "✅",
+                None => "❌"
+            },
+               habit.description.clone().unwrap()).unwrap();
         first = false;
     }
 
-    let distance: u16 = (lines.len() - 1).try_into().unwrap();
+    let distance: u16 = (habits.len() - 1).try_into().unwrap();
     write!(stdout, "\r{}", termion::cursor::Up(distance)).unwrap();
 
     stdout.flush().unwrap();
 
     let mut current = 0;
-    let max = lines.len() - 1;
+    let max = habits.len() - 1;
 
     for c in stdin.keys() {
         match c.unwrap() {
@@ -74,16 +75,15 @@ fn main() {
 
 
 #[tokio::main]
-async fn sync_get_habits() -> Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> {
+async fn sync_get_habits(today: NaiveDate) -> Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> {
     let config = configuration();
-    let response = hahabit_api::get_habits_for_date(&config, "2020-12-01".to_string()).await;
+    let response = hahabit_api::get_habits_for_date(&config, today.to_string()).await;
     response
 }
 
 fn configuration() -> Configuration {
     let mut config = Configuration::default();
     let creds = read_credentials();
-    println!("{:?}", creds);
     config.basic_auth = creds;
     config
 }
