@@ -9,4 +9,8 @@ BIN=${HOME}/local/bin
 BUILT_BINARY=`pwd`/${TOOL}/build/install/${TOOL}/bin/${TOOL}
 
 ./gradlew install
-ln -fs ${BUILT_BINARY} ${BIN}/${TOOL}
+ln -fs ${BUILT_BINARY} ${BIN}/${TOOL}-java
+
+cd ../rust/hahabit
+cargo install --path .
+
