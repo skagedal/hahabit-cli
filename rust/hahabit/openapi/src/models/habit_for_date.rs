@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct HabitForDate {
-    #[serde(rename = "habitId", skip_serializing_if = "Option::is_none")]
-    pub habit_id: Option<i64>,
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    #[serde(rename = "date", skip_serializing_if = "Option::is_none")]
-    pub date: Option<String>,
-    #[serde(rename = "trackingId", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
-    pub tracking_id: Option<Option<i64>>,
+    #[serde(rename = "habitId")]
+    pub habit_id: i64,
+    #[serde(rename = "description")]
+    pub description: String,
+    #[serde(rename = "date")]
+    pub date: String,
+    #[serde(rename = "trackingId", deserialize_with = "Option::deserialize")]
+    pub tracking_id: Option<i64>,
 }
 
 impl HabitForDate {
-    pub fn new() -> HabitForDate {
+    pub fn new(habit_id: i64, description: String, date: String, tracking_id: Option<i64>) -> HabitForDate {
         HabitForDate {
-            habit_id: None,
-            description: None,
-            date: None,
-            tracking_id: None,
+            habit_id,
+            description,
+            date,
+            tracking_id,
         }
     }
 }

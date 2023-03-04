@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct HabitCreateRequest {
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
+    #[serde(rename = "description")]
+    pub description: String,
 }
 
 impl HabitCreateRequest {
-    pub fn new() -> HabitCreateRequest {
+    pub fn new(description: String) -> HabitCreateRequest {
         HabitCreateRequest {
-            description: None,
+            description,
         }
     }
 }

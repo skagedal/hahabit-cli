@@ -18,8 +18,7 @@ fn main() {
     println!("{}", today);
 
     let response: Result<GetHabitsForDate200Response, Error<GetHabitsForDateError>> = sync_get_habits(today);
-    let response = response.expect("Failed to get habits for date");
-    let habits = response.habits.unwrap();
+    let habits = response.expect("Failed to get habits for date").habits;
 
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
@@ -30,11 +29,11 @@ fn main() {
             write!(stdout, "\r\n").unwrap();
         }
         write!(stdout, "{} {}",
-            match habit.tracking_id.unwrap() {
+            match habit.tracking_id {
                 Some(_) => "✅",
                 None => "❌"
             },
-               habit.description.clone().unwrap()).unwrap();
+               habit.description).unwrap();
         first = false;
     }
 
@@ -64,7 +63,7 @@ fn main() {
             Key::Char('\n') => {
                 write!(stdout, "⏳\r").unwrap();
                 stdout.flush().unwrap();
-                sync_post_habit(habits[current].habit_id.unwrap(), today).unwrap();
+                sync_post_habit(habits[current].habit_id, today).unwrap();
                 write!(stdout, "✅\r").unwrap();
             }
             _ => {}

@@ -51,9 +51,6 @@ public class GetHabitsForDate200Response {
   }
 
   public GetHabitsForDate200Response addHabitsItem(HabitForDate habitsItem) {
-    if (this.habits == null) {
-      this.habits = new ArrayList<>();
-    }
     this.habits.add(habitsItem);
     return this;
   }
@@ -62,9 +59,9 @@ public class GetHabitsForDate200Response {
    * Get habits
    * @return habits
   **/
-  @javax.annotation.Nullable
+  @javax.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_HABITS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<HabitForDate> getHabits() {
     return habits;
@@ -72,7 +69,7 @@ public class GetHabitsForDate200Response {
 
 
   @JsonProperty(JSON_PROPERTY_HABITS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setHabits(List<HabitForDate> habits) {
     this.habits = habits;
   }

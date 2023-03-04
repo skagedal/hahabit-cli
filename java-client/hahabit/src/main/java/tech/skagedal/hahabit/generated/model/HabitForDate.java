@@ -26,10 +26,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.LocalDate;
-import org.openapitools.jackson.nullable.JsonNullable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.util.NoSuchElementException;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
@@ -54,7 +50,7 @@ public class HabitForDate {
   private LocalDate date;
 
   public static final String JSON_PROPERTY_TRACKING_ID = "trackingId";
-  private JsonNullable<Long> trackingId = JsonNullable.<Long>undefined();
+  private Long trackingId;
 
   public HabitForDate() { 
   }
@@ -68,9 +64,9 @@ public class HabitForDate {
    * Get habitId
    * @return habitId
   **/
-  @javax.annotation.Nullable
+  @javax.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_HABIT_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Long getHabitId() {
     return habitId;
@@ -78,7 +74,7 @@ public class HabitForDate {
 
 
   @JsonProperty(JSON_PROPERTY_HABIT_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setHabitId(Long habitId) {
     this.habitId = habitId;
   }
@@ -93,9 +89,9 @@ public class HabitForDate {
    * Get description
    * @return description
   **/
-  @javax.annotation.Nullable
+  @javax.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_DESCRIPTION)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getDescription() {
     return description;
@@ -103,7 +99,7 @@ public class HabitForDate {
 
 
   @JsonProperty(JSON_PROPERTY_DESCRIPTION)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDescription(String description) {
     this.description = description;
   }
@@ -118,9 +114,9 @@ public class HabitForDate {
    * Get date
    * @return date
   **/
-  @javax.annotation.Nullable
+  @javax.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_DATE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getDate() {
     return date;
@@ -128,14 +124,14 @@ public class HabitForDate {
 
 
   @JsonProperty(JSON_PROPERTY_DATE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDate(LocalDate date) {
     this.date = date;
   }
 
 
   public HabitForDate trackingId(Long trackingId) {
-    this.trackingId = JsonNullable.<Long>of(trackingId);
+    this.trackingId = trackingId;
     return this;
   }
 
@@ -144,26 +140,18 @@ public class HabitForDate {
    * @return trackingId
   **/
   @javax.annotation.Nullable
-  @JsonIgnore
+  @JsonProperty(JSON_PROPERTY_TRACKING_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Long getTrackingId() {
-        return trackingId.orElse(null);
-  }
-
-  @JsonProperty(JSON_PROPERTY_TRACKING_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public JsonNullable<Long> getTrackingId_JsonNullable() {
     return trackingId;
   }
-  
-  @JsonProperty(JSON_PROPERTY_TRACKING_ID)
-  public void setTrackingId_JsonNullable(JsonNullable<Long> trackingId) {
-    this.trackingId = trackingId;
-  }
 
+
+  @JsonProperty(JSON_PROPERTY_TRACKING_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTrackingId(Long trackingId) {
-    this.trackingId = JsonNullable.<Long>of(trackingId);
+    this.trackingId = trackingId;
   }
 
 
@@ -182,23 +170,12 @@ public class HabitForDate {
     return Objects.equals(this.habitId, habitForDate.habitId) &&
         Objects.equals(this.description, habitForDate.description) &&
         Objects.equals(this.date, habitForDate.date) &&
-        equalsNullable(this.trackingId, habitForDate.trackingId);
-  }
-
-  private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
-    return a == b || (a != null && b != null && a.isPresent() && b.isPresent() && Objects.deepEquals(a.get(), b.get()));
+        Objects.equals(this.trackingId, habitForDate.trackingId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(habitId, description, date, hashCodeNullable(trackingId));
-  }
-
-  private static <T> int hashCodeNullable(JsonNullable<T> a) {
-    if (a == null) {
-      return 1;
-    }
-    return a.isPresent() ? Arrays.deepHashCode(new Object[]{a.get()}) : 31;
+    return Objects.hash(habitId, description, date, trackingId);
   }
 
   @Override

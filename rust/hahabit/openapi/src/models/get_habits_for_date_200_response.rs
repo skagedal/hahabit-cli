@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetHabitsForDate200Response {
-    #[serde(rename = "habits", skip_serializing_if = "Option::is_none")]
-    pub habits: Option<Vec<crate::models::HabitForDate>>,
+    #[serde(rename = "habits")]
+    pub habits: Vec<crate::models::HabitForDate>,
 }
 
 impl GetHabitsForDate200Response {
-    pub fn new() -> GetHabitsForDate200Response {
+    pub fn new(habits: Vec<crate::models::HabitForDate>) -> GetHabitsForDate200Response {
         GetHabitsForDate200Response {
-            habits: None,
+            habits,
         }
     }
 }
