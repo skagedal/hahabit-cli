@@ -15,7 +15,8 @@ openapi-generator generate \
     --invoker-package ${BASE_PACKAGE}.invoker \
     --package-name ${BASE_PACKAGE}.package \
     --model-package ${BASE_PACKAGE}.model \
-    --output $TMP_DIR
+    --output $TMP_DIR \
+    --additional-properties=hideGenerationTimestamp=true
 
 rm -rf $TARGET_DIR/generated
 cp -r $SOURCE_DIR $TARGET_DIR/
