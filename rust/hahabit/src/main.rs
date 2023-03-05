@@ -88,8 +88,7 @@ fn track_habit(config: &Configuration, habit_id: i64, today: NaiveDate) -> Resul
 
 fn configuration() -> Configuration {
     let mut config = Configuration::default();
-    let creds = read_credentials();
-    config.basic_auth = creds;
+    config.basic_auth = read_credentials();
     config
 }
 
