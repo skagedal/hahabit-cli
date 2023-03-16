@@ -7,19 +7,26 @@ use chrono::NaiveDate;
 use openapi::apis::configuration::{BasicAuth, Configuration};
 use openapi::apis::{Error, hahabit_api};
 use openapi::apis::hahabit_api::{GetHabitsForDateError, TrackHabitError};
-use openapi::models::GetHabitsForDate200Response;
+use openapi::models::{GetHabitsForDate200Response, HabitForDate};
 use toml::Table;
 
 extern crate termion;
 
 fn main() {
     let today = chrono::Local::now().date_naive();
-    println!("{}", today);
+    print!("{}... ", today);
 
     let api_config = configuration();
     let habits = get_habits(&api_config, today)
         .expect("Failed to get habits for date")
         .habits;
+
+    if all_done(&habits) {
+        println!("all done!");
+        return;
+    } else {
+        println!("")
+    }
 
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
@@ -74,6 +81,10 @@ fn main() {
     }
 
     write!(stdout, "{}\r\n", termion::cursor::Down((max - current) as u16)).unwrap();
+}
+
+fn all_done(habits: &Vec<HabitForDate>) -> bool {
+    habits.iter().all(|h| h.tracking_id.is_some())
 }
 
 
