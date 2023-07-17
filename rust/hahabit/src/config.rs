@@ -9,14 +9,14 @@ pub struct Config {
 
 pub enum ConfigError {
     OpenFile(PathBuf, std::io::Error),
-    InvalidFile
+    InvalidFile(toml::de::Error)
 }
 
 pub fn read_config() -> Result<Config, ConfigError> {
     let home = dirs::home_dir().expect("Unable to find home directory");
     let config_path = home.join(".hahabit.toml");
     let contents = std::fs::read_to_string(&config_path).map_err(|e| ConfigError::OpenFile(config_path, e))?;
-    Ok(toml::from_str(&contents).map_err(|_| ConfigError::InvalidFile)?)
+    Ok(toml::from_str(&contents).map_err(|e| ConfigError::InvalidFile(e))?)
 }
 
 #[cfg(test)]

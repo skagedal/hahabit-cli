@@ -14,6 +14,10 @@ use crate::config::{Config, ConfigError, read_config};
 extern crate termion;
 
 fn main() {
+    let today = chrono::Local::now().date_naive();
+    print!("{}... ", today);
+    stdout().flush().unwrap();
+
     let config = read_config().unwrap_or_else(|e| {
         match e {
             ConfigError::OpenFile(path, error) => {
@@ -24,20 +28,20 @@ fn main() {
                            password = 'password'\n\n\
                            (Yes, keeping passwords directly in the file is bad practice. This is alpha software.)");
             }
-            ConfigError::InvalidFile => {
+            ConfigError::InvalidFile(error) => {
                 eprintln!("Unable to read config file");
+                eprintln!("Error: {}", error);
             }
         }
         std::process::exit(1);
     });
 
-    let today = chrono::Local::now().date_naive();
-    print!("{}... ", today);
-
     let api_config = api_configuration(config);
-    let habits = get_habits(&api_config, today)
-        .expect("Failed to get habits for date")
-        .habits;
+    let habits = get_habits(&api_config, today).unwrap_or_else(|e| {
+        eprintln!("Unable to get habit tracking status: {}", e);
+
+        std::process::exit(1);
+    }).habits;
 
     if all_done(&habits) {
         println!("all done!");
