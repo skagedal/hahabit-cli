@@ -1,22 +1,40 @@
-use std::fs;
+mod config;
+
 use termion::raw::IntoRawMode;
 use termion::event::Key;
 use termion::input::TermRead;
 use std::io::{Write, stdout, stdin};
 use chrono::NaiveDate;
-use openapi::apis::configuration::{BasicAuth, Configuration};
+use openapi::apis::configuration::Configuration;
 use openapi::apis::{Error, hahabit_api};
 use openapi::apis::hahabit_api::{GetHabitsForDateError, TrackHabitError};
 use openapi::models::{GetHabitsForDate200Response, HabitForDate};
-use toml::Table;
+use crate::config::{Config, ConfigError, read_config};
 
 extern crate termion;
 
 fn main() {
+    let config = read_config().unwrap_or_else(|e| {
+        match e {
+            ConfigError::OpenFile(path, error) => {
+                eprintln!("Unable to open config file: {}", path.display());
+                eprintln!("Error: {}", error);
+                eprintln!("Make sure this file exists, is readable and looks something like this:\n\n\
+                           username = 'username'\n\
+                           password = 'password'\n\n\
+                           (Yes, keeping passwords directly in the file is bad practice. This is alpha software.)");
+            }
+            ConfigError::InvalidFile => {
+                eprintln!("Unable to read config file");
+            }
+        }
+        std::process::exit(1);
+    });
+
     let today = chrono::Local::now().date_naive();
     print!("{}... ", today);
 
-    let api_config = configuration();
+    let api_config = api_configuration(config);
     let habits = get_habits(&api_config, today)
         .expect("Failed to get habits for date")
         .habits;
@@ -97,18 +115,8 @@ fn track_habit(config: &Configuration, habit_id: i64, today: NaiveDate) -> Resul
         .map(|_| ())
 }
 
-fn configuration() -> Configuration {
-    let mut config = Configuration::default();
-    config.basic_auth = read_credentials();
-    config
-}
-
-fn read_credentials() -> Option<BasicAuth> {
-    let home = dirs::home_dir().expect("Unable to find home directory");
-    let creds = home.join(".hahabit.toml");
-    let contents = fs::read_to_string(&creds).expect("Unable to read file");
-    let toml = contents.parse::<Table>().unwrap();
-
-    // lol what is this
-    Some((toml["username"].clone().try_into().unwrap(), Some(toml["password"].clone().try_into().unwrap())))
+fn api_configuration(config: Config) -> Configuration {
+    let mut api_config = Configuration::default();
+    api_config.basic_auth = Some((config.username, Some(config.password)));
+    api_config
 }
