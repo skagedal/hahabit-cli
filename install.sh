@@ -2,15 +2,16 @@
 
 set -e
 
-cd java-client
+# cd java-client
 
-TOOL=hahabit
-BIN=${HOME}/local/bin
-BUILT_BINARY=`pwd`/${TOOL}/build/install/${TOOL}/bin/${TOOL}
+# TOOL=hahabit
+# BIN=${HOME}/local/bin
+# BUILT_BINARY=`pwd`/${TOOL}/build/install/${TOOL}/bin/${TOOL}
 
-./gradlew install
-ln -fs ${BUILT_BINARY} ${BIN}/${TOOL}-java
+# ./gradlew install
+# ln -fs ${BUILT_BINARY} ${BIN}/${TOOL}-java
+# cd ../rust/hahabit
 
-cd ../rust/hahabit
+cd rust/hahabit
 cargo install --path .
 
